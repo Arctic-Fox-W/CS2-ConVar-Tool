@@ -1,0 +1,114 @@
+{
+  "connection": {
+    "host": "",
+    "port": 27015
+  },
+  "convars": [],
+  "groups": [
+    {
+      "name": "比赛与时间",
+      "convars": [
+        { "name": "mp_timelimit", "zh": "地图时间限制（分钟）", "initial": "15.000000" },
+        { "name": "mp_roundtime", "zh": "每回合时间（分钟）", "initial": "8.000000" },
+        { "name": "mp_roundtime_defuse", "zh": "拆弹图回合时间（分钟）", "initial": "60.000000" },
+        { "name": "mp_roundtime_hostage", "zh": "人质图回合时间（分钟）", "initial": "60.000000" },
+        { "name": "mp_maxrounds", "zh": "最大回合数", "initial": "0" },
+        { "name": "mp_winlimit", "zh": "胜利所需回合数", "initial": "0" },
+        { "name": "mp_freezetime", "zh": "冻结时间（秒）", "initial": "5" }
+      ]
+    },
+    {
+      "name": "购买与金钱",
+      "convars": [
+        { "name": "mp_startmoney", "zh": "初始金钱", "initial": "16000" },
+        { "name": "mp_maxmoney", "zh": "最大金钱", "initial": "9999999" },
+        { "name": "mp_buytime", "zh": "购买时间（秒）", "initial": "99999.000000" },
+        { "name": "mp_buy_anywhere", "zh": "允许任意位置购买", "initial": "1" }
+      ]
+    },
+    {
+      "name": "热身与重启",
+      "convars": [
+        { "name": "mp_warmuptime", "zh": "热身时长（秒）", "initial": "5.000000" },
+        { "name": "mp_warmup_pausetimer", "zh": "热身计时是否暂停", "initial": "0" },
+        { "name": "mp_round_restart_delay", "zh": "回合重开延迟（秒）", "initial": "10.000000" },
+        { "name": "mp_restartgame", "zh": "重启比赛延迟（秒）", "initial": "0" }
+      ]
+    },
+    {
+      "name": "队伍与规则",
+      "convars": [
+        { "name": "mp_forcecamera", "zh": "强制观看队友视角", "initial": "0" },
+        { "name": "mp_limitteams", "zh": "队伍人数差限制", "initial": "0" },
+        { "name": "mp_autoteambalance", "zh": "自动队伍平衡", "initial": "false" },
+        { "name": "mp_friendlyfire", "zh": "开启队友伤害", "initial": "false" },
+        { "name": "mp_force_pick_time", "zh": "选择阵营超时时间（秒）", "initial": "15.000000" },
+        { "name": "mp_solid_teammates", "zh": "队友是否实体阻挡", "initial": "2" }
+      ]
+    },
+    {
+      "name": "默认武器",
+      "convars": [
+        { "name": "mp_ct_default_primary", "zh": "CT 默认主武器" },
+        { "name": "mp_t_default_primary", "zh": "T 默认主武器" },
+        { "name": "mp_ct_default_secondary", "zh": "CT 默认副武器", "initial": "weapon_hkp2000" },
+        { "name": "mp_t_default_secondary", "zh": "T 默认副武器", "initial": "weapon_glock" }
+      ]
+    },
+    {
+      "name": "服务器移动",
+      "convars": [
+        { "name": "sv_cheats", "zh": "允许作弊命令（生产环境应为0）", "initial": "true" },
+        { "name": "sv_gravity", "zh": "重力值", "initial": "800.000000" },
+        { "name": "sv_accelerate", "zh": "地面加速度", "initial": "5.500000" },
+        { "name": "sv_airaccelerate", "zh": "空中加速度", "initial": "4000.000000" },
+        { "name": "sv_stopspeed", "zh": "停止速度阈值", "initial": "80.000000" },
+        { "name": "sv_maxspeed", "zh": "最大移动速度", "initial": "320.000000" }
+      ]
+    },
+    {
+      "name": "网络与投票",
+      "convars": [
+        { "name": "sv_minrate", "zh": "客户端最小网络速率", "initial": "98304" },
+        { "name": "sv_maxrate", "zh": "客户端最大网络速率", "initial": "0" },
+        { "name": "sv_allow_votes", "zh": "允许原生投票", "initial": "true" },
+        { "name": "sv_hibernate_when_empty", "zh": "无玩家时休眠服务器", "initial": "false" },
+        { "name": "sv_voiceenable", "zh": "启用语音", "initial": "true" },
+        { "name": "sv_deadtalk", "zh": "死亡玩家可语音（队内）", "initial": "false" },
+        { "name": "sv_password", "zh": "服务器密码" },
+        { "name": "sv_alltalk", "zh": "允许跨队语音（全体语音）", "initial": "false" },
+        { "name": "sv_lan", "zh": "局域网模式", "initial": "false" },
+        { "name": "mp_endmatch_votenextmap", "zh": "比赛结束投票下一地图", "initial": "true" },
+        { "name": "sv_vote_issue_kick_allowed", "zh": "允许踢人投票", "initial": "true" },
+        { "name": "sv_vote_issue_restart_game_allowed", "zh": "允许重启比赛投票", "initial": "false" },
+        { "name": "sv_vote_issue_nextlevel_allowed", "zh": "允许下一地图投票", "initial": "true" },
+        { "name": "sv_vote_failure_timer", "zh": "投票失败后冷却时间（秒）", "initial": "300.000000" },
+        { "name": "sv_autobunnyhopping", "zh": "自动连跳", "initial": "false" },
+        { "name": "sv_enablebunnyhopping", "zh": "启用连跳", "initial": "false" }
+      ]
+    },
+    {
+      "name": "机器人",
+      "convars": [
+        { "name": "bot_quota", "zh": "机器人数量", "initial": "10" },
+        { "name": "bot_quota_mode", "zh": "机器人配额模式", "initial": "fill" },
+        { "name": "bot_difficulty", "zh": "机器人难度（0-3）", "initial": "1" },
+        { "name": "bot_chatter", "zh": "机器人聊天级别", "initial": "normal" },
+        { "name": "bot_join_team", "zh": "机器人加入队伍", "initial": "any" },
+        { "name": "bot_join_after_player", "zh": "玩家加入后再加入机器人", "initial": "true" },
+        { "name": "bot_allow_grenades", "zh": "机器人是否使用投掷物", "initial": "true" },
+        { "name": "bot_allow_machine_guns", "zh": "机器人是否使用机枪", "initial": "true" }
+      ]
+    },
+    {
+      "name": "伤害与观战",
+      "convars": [
+        { "name": "ammo_grenade_limit_total", "zh": "玩家携带投掷物总数量上限", "initial": "10" },
+        { "name": "ff_damage_reduction_bullets", "zh": "队友子弹伤害比例", "initial": "0.000000" },
+        { "name": "ff_damage_reduction_grenade", "zh": "队友手雷伤害比例", "initial": "0.000000" },
+        { "name": "ff_damage_reduction_other", "zh": "队友其他伤害比例", "initial": "1.000000" },
+        { "name": "spec_freeze_time", "zh": "死亡视角冻结时间（秒）", "initial": "3.000000" }
+      ]
+    }
+  ]
+}
