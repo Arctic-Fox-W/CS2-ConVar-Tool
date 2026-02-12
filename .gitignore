@@ -3,6 +3,10 @@ __pycache__/
 *.pyo
 *.pyd
 *.log
+*.zip
+*.ico
+*.jpg
+*.exe
 build/
 dist/
 zero_rcon_tool-v*/
@@ -15,5 +19,3 @@ env/
 zero_convars_config.json
 package.ps1
 cs2_rcon_tool.spec
-logo.ico
-logo.jpg
