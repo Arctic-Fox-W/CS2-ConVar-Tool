@@ -144,7 +144,13 @@ if __name__ == "__main__":
             self.ts_plus_btn = QPushButton("+")
             self.ts_apply_btn = QPushButton("加速")
             self.ts_reset_btn = QPushButton("恢复")
-            for b in [self.restart_btn, self.cheats_toggle_btn, self.warmup_start_btn, self.warmup_end_btn, self.pause_btn, self.unpause_btn, self.get_map_btn, self.bot_add_btn, self.bot_kick_btn, self.bot_dontshoot_btn, self.bot_stop_btn, self.bot_freeze_btn, self.ts_minus_btn, self.ts_plus_btn, self.ts_apply_btn, self.ts_reset_btn]:
+            self.workshop_edit = QLineEdit()
+            self.workshop_edit.setPlaceholderText("工坊合集ID")
+            self.workshop_apply_btn = QPushButton("换图合集")
+            self.single_map_edit = QLineEdit()
+            self.single_map_edit.setPlaceholderText("工坊地图ID / 地图名")
+            self.single_map_apply_btn = QPushButton("换单张图")
+            for b in [self.restart_btn, self.cheats_toggle_btn, self.warmup_start_btn, self.warmup_end_btn, self.pause_btn, self.unpause_btn, self.get_map_btn, self.bot_add_btn, self.bot_kick_btn, self.bot_dontshoot_btn, self.bot_stop_btn, self.bot_freeze_btn, self.ts_minus_btn, self.ts_plus_btn, self.ts_apply_btn, self.ts_reset_btn, self.workshop_apply_btn, self.single_map_apply_btn]:
                 b.setEnabled(False)
             self.timescale_spin.setEnabled(False)
             grid = QGridLayout()
@@ -172,6 +178,14 @@ if __name__ == "__main__":
             speed_row.addWidget(self.ts_apply_btn)
             speed_row.addWidget(self.ts_reset_btn)
             left_layout.addLayout(speed_row)
+            workshop_row = QHBoxLayout()
+            workshop_row.addWidget(self.workshop_edit)
+            workshop_row.addWidget(self.workshop_apply_btn)
+            left_layout.addLayout(workshop_row)
+            single_row = QHBoxLayout()
+            single_row.addWidget(self.single_map_edit)
+            single_row.addWidget(self.single_map_apply_btn)
+            left_layout.addLayout(single_row)
             right_panel = QWidget()
             right_layout = QVBoxLayout(right_panel)
             right_layout.addLayout(row3)
@@ -193,11 +207,13 @@ if __name__ == "__main__":
             self.save_btn = QPushButton("保存配置")
             self.load_btn = QPushButton("加载配置")
             self.save_initial_btn = QPushButton("保存初始值")
+            self.generate_cfg_btn = QPushButton("生成 cfg")
             top_row.addWidget(self.add_row_btn)
             top_row.addWidget(self.fetch_all_btn)
             top_row.addWidget(self.save_btn)
             top_row.addWidget(self.save_initial_btn)
             top_row.addWidget(self.load_btn)
+            top_row.addWidget(self.generate_cfg_btn)
             top_row.addStretch(1)
             convar_layout.addLayout(top_row)
             self.splitter = QSplitter()
@@ -232,7 +248,9 @@ if __name__ == "__main__":
             self.status_timer.setInterval(5000)
             self.status_timer.timeout.connect(self.on_status_timer)
             base_dir = os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.dirname(os.path.abspath(__file__))
-            self.config_path = os.path.join(base_dir, "convars_config.json")
+            p1 = os.path.join(base_dir, "convars_config.json")
+            p2 = os.path.join(base_dir, "zero_convars_config.json")
+            self.config_path = p1 if os.path.exists(p1) else p2
             self.connect_btn.clicked.connect(self.on_connect)
             self.disconnect_btn.clicked.connect(self.on_disconnect)
             self.send_btn.clicked.connect(self.on_send)
@@ -243,6 +261,8 @@ if __name__ == "__main__":
             self.pause_btn.clicked.connect(self.on_cmd_pause_match)
             self.unpause_btn.clicked.connect(self.on_cmd_unpause_match)
             self.get_map_btn.clicked.connect(self.on_cmd_get_current_map)
+            self.workshop_apply_btn.clicked.connect(self.on_cmd_workshop_collection)
+            self.single_map_apply_btn.clicked.connect(self.on_cmd_switch_single_map)
             self.bot_add_btn.clicked.connect(self.on_cmd_bot_add)
             self.bot_kick_btn.clicked.connect(self.on_cmd_bot_kick)
             self.bot_dontshoot_btn.clicked.connect(self.on_cmd_bot_dont_shoot)
@@ -256,6 +276,7 @@ if __name__ == "__main__":
             self.fetch_all_btn.clicked.connect(self.on_fetch_all)
             self.save_btn.clicked.connect(self.on_save_config)
             self.save_initial_btn.clicked.connect(self.on_save_initials)
+            self.generate_cfg_btn.clicked.connect(self.on_generate_cfg)
             self.load_btn.clicked.connect(self.on_load_config)
             self.tree.currentItemChanged.connect(self.on_tree_selection_changed)
             self.search_edit = QLineEdit()
@@ -300,6 +321,8 @@ if __name__ == "__main__":
                 self.pause_btn.setEnabled(True)
                 self.unpause_btn.setEnabled(True)
                 self.get_map_btn.setEnabled(True)
+                self.workshop_apply_btn.setEnabled(True)
+                self.single_map_apply_btn.setEnabled(True)
                 self.bot_add_btn.setEnabled(True)
                 self.bot_kick_btn.setEnabled(True)
                 self.bot_dontshoot_btn.setEnabled(True)
@@ -337,6 +360,8 @@ if __name__ == "__main__":
             self.pause_btn.setEnabled(False)
             self.unpause_btn.setEnabled(False)
             self.get_map_btn.setEnabled(False)
+            self.workshop_apply_btn.setEnabled(False)
+            self.single_map_apply_btn.setEnabled(False)
             self.bot_add_btn.setEnabled(False)
             self.bot_kick_btn.setEnabled(False)
             self.bot_dontshoot_btn.setEnabled(False)
@@ -457,6 +482,33 @@ if __name__ == "__main__":
                         self.status_players.setText(f"在线: {cur}")
                 if name:
                     self.status_map.setText(f"地图: {name}")
+            except Exception as e:
+                self.output.appendPlainText(f"$ {cmd}\n{str(e)}")
+        def on_cmd_workshop_collection(self):
+            if not self.client:
+                return
+            cid = self.workshop_edit.text().strip()
+            if not cid:
+                return
+            cmd = f"host_workshop_collection {cid}"
+            try:
+                resp = self.client.execute(cmd)
+                self.output.appendPlainText(f"$ {cmd}\n{resp or 'OK'}")
+            except Exception as e:
+                self.output.appendPlainText(f"$ {cmd}\n{str(e)}")
+        def on_cmd_switch_single_map(self):
+            if not self.client:
+                return
+            s = self.single_map_edit.text().strip()
+            if not s:
+                return
+            if s.isdigit():
+                cmd = f"host_workshop_map {s}"
+            else:
+                cmd = f"changelevel {s}"
+            try:
+                resp = self.client.execute(cmd)
+                self.output.appendPlainText(f"$ {cmd}\n{resp or 'OK'}")
             except Exception as e:
                 self.output.appendPlainText(f"$ {cmd}\n{str(e)}")
         def on_ts_minus(self):
@@ -1112,6 +1164,52 @@ if __name__ == "__main__":
         def on_load_config(self):
             self.load_config()
             self.output.appendPlainText("已加载配置")
+        def on_generate_cfg(self):
+            name = ""
+            if self.client:
+                try:
+                    resp = self.client.execute("status")
+                    name = self._extract_map_name(resp) or ""
+                except Exception:
+                    pass
+            if not name:
+                try:
+                    lbl = self.status_map.text()
+                    if isinstance(lbl, str) and "地图:" in lbl:
+                        name = lbl.split("地图:", 1)[1].strip()
+                except Exception:
+                    name = ""
+            lines = []
+            lines.append('echo "-------------------------------"')
+            lines.append(f'echo "ZE地图 {name or "-"} 配置正在载入"')
+            lines.append('echo "-------------------------------"')
+            changed = []
+            for r in range(self.table.rowCount()):
+                name_item = self.table.item(r, 0)
+                init_item = self.table.item(r, 2)
+                cur_item = self.table.item(r, 3)
+                n = name_item.text().strip() if name_item and name_item.text() else ""
+                init = init_item.text().strip() if init_item and init_item.text() else ""
+                cur = cur_item.text().strip() if cur_item and cur_item.text() else ""
+                if n and init and cur and cur != init:
+                    changed.append(f"{n} {cur}")
+            lines.extend(changed)
+            lines.append('echo "-------------------------------"')
+            lines.append(f'echo "ZE地图 {name or "-"} 配置已载入完毕"')
+            lines.append('echo "-------------------------------"')
+            start_dir = os.path.dirname(self.config_path) if isinstance(self.config_path, str) and self.config_path else os.getcwd()
+            default_name = f"ze_map_{name}.cfg" if name else "ze_map.cfg"
+            path, _ = QFileDialog.getSaveFileName(self, "保存 cfg 文件", os.path.join(start_dir, default_name), "CFG 文件 (*.cfg);;所有文件 (*)")
+            if not path:
+                self.output.appendPlainText("\n".join(lines))
+                self.output.appendPlainText("已在下方输出 cfg 内容（未保存到文件）")
+                return
+            try:
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write("\n".join(lines) + "\n")
+                self.output.appendPlainText(f"已生成 cfg: {path}（包含 {len(changed)} 条变更）")
+            except Exception as e:
+                self.output.appendPlainText(str(e))
         def on_choose_config(self):
             start_dir = os.path.dirname(self.config_path) if isinstance(self.config_path, str) and self.config_path else os.getcwd()
             path, _ = QFileDialog.getOpenFileName(self, "选择配置 JSON", start_dir, "JSON 文件 (*.json);;所有文件 (*)")
